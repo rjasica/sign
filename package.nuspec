@@ -10,7 +10,7 @@
         <iconUrl>https://raw.github.com/rjasica/sign/master/package_icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Assembly signing tool</description>
-        <tags>Assembyl sign</tags>
+        <tags>Assembly sign</tags>
     <dependencies/>
     </metadata>
     <files>
