@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using Mono.Cecil;
 
@@ -9,6 +10,9 @@ namespace Sign.Core
 {
     public class Signer : ISigner
     {
+        private static readonly string KnowTypeAttributeName = typeof(KnownTypeAttribute).FullName;
+        private static readonly string TypeFullName = typeof(Type).FullName;
+
         private static bool IsSigned(AssemblyDefinition assemblyDefinition)
         {
             var name = assemblyDefinition.Name;
@@ -22,6 +26,8 @@ namespace Sign.Core
             var modified = GetNotSignedAssemblies(allAssemblies);
 
             UpdateReference(snk, modified, allAssemblies);
+            UpdateStrongNameKey( snk, modified );
+            UpdateKnowTypeAttribute( snk, modified );
 
             WriteModifiedAssemblies(snk, modified);
         }
@@ -48,7 +54,7 @@ namespace Sign.Core
             }
         }
 
-        private static void WriteModifiedAssemblies(StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified)
+        private static void UpdateStrongNameKey(StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified)
         {
             foreach (var assemblyInfo in modified)
             {
@@ -57,6 +63,54 @@ namespace Sign.Core
                 name.PublicKey = snk.PublicKey;
                 name.HasPublicKey = true;
                 name.Attributes |= AssemblyAttributes.PublicKey;
+            }
+        }
+
+        private static void UpdateKnowTypeAttribute( StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified )
+        {
+            foreach (var assemblyInfo in modified)
+            {
+                UpdateKnowTypeAttribute( snk, assemblyInfo.Assembly );
+            }
+        }
+
+        private static void UpdateKnowTypeAttribute( StrongNameKeyPair snk, AssemblyDefinition assemby )
+        {
+            foreach( var type in assemby.MainModule.GetTypes().Where(t => t.HasCustomAttributes ) )
+            {
+                var knownTypeAttribute = type.CustomAttributes.FirstOrDefault( t => t.AttributeType.FullName == KnowTypeAttributeName);
+                if( knownTypeAttribute == null )
+                {
+                    continue;
+                }
+
+                var argument = knownTypeAttribute.ConstructorArguments.FirstOrDefault( t => t.Type.FullName == TypeFullName );
+
+                if( argument.Type == null || argument.Value == null )
+                {
+                    continue;
+                }
+
+                var typeReference = argument.Value as TypeReference;
+                if( typeReference == null )
+                {
+                    continue;
+                }
+
+                var assemblyReference = typeReference.Scope as AssemblyNameReference;
+                if( assemblyReference == null )
+                {
+                    continue;
+                }
+
+                assemblyReference.PublicKey = snk.PublicKey;
+            }
+        }
+
+        private static void WriteModifiedAssemblies(StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified)
+        {
+            foreach (var assemblyInfo in modified)
+            {
                 assemblyInfo.Assembly.Write(assemblyInfo.FullPath, new WriterParameters {StrongNameKeyPair = snk});
             }
         }
