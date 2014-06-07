@@ -47,6 +47,11 @@ namespace Sign.Core.Updater
                 var resource = resArray[resIndex];
                 if (resource.ResourceType == ResourceType.Embedded)
                 {
+                    if(!resource.Name.EndsWith(".g.resources"))
+                    {
+                        continue;
+                    }
+
                     EmbeddedResource embededResource = (EmbeddedResource)resource;
                     bool modResource = false;
 
