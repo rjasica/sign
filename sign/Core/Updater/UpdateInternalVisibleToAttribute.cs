@@ -23,12 +23,12 @@ namespace Sign.Core.Updater
 
         public void Update(
             StrongNameKeyPair snk,
-            HashSet<IAssemblyInfo> modified,
+            HashSet<IAssemblyInfo> notSigned,
             IEnumerable<IAssemblyInfo> allAssemblies )
         {
-            foreach( var assemblyInfo in modified.ToArray() )
+            foreach( var assemblyInfo in notSigned.ToArray() )
             {
-                UpdateAssembly( modified, assemblyInfo );
+                UpdateAssembly( notSigned, assemblyInfo );
             }
         }
 
@@ -64,11 +64,22 @@ namespace Sign.Core.Updater
                     continue;
                 }
 
-                var newArgument = new CustomAttributeArgument( argument.Value.Type, signedAssembly.Assembly.FullName );
+                var assemblyName = string.Format(
+                    "{0}, PublicKey={1}",
+                    signedAssembly.Assembly.Name.Name,
+                    GetPublicKeyToken( signedAssembly ) );
+                var newArgument = new CustomAttributeArgument( argument.Value.Type, assemblyName );
 
                 info.ConstructorArguments.Clear();
                 info.ConstructorArguments.Add( newArgument );
             }
+        }
+
+        private static string GetPublicKeyToken( IAssemblyInfo signedAssembly )
+        {
+            var publicKeyToken = signedAssembly.Assembly.Name.PublicKey.Select( x => x.ToString( "x2" ) )
+                .Aggregate( ( x, y ) => x + y );
+            return publicKeyToken;
         }
 
         private static IAssemblyInfo GetMatchingSignedAssembly(

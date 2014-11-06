@@ -8,6 +8,6 @@ namespace Sign.Core
 {
     public interface IUpdater
     {
-        void Update(StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified, IEnumerable<IAssemblyInfo> allAssemblies);
+        void Update( StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies );
     }
 }

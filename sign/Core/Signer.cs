@@ -32,19 +32,19 @@ namespace Sign.Core
         public void Sign( StrongNameKeyPair snk, IAssemblyInfoProvider assemblyInfoProvider )
         {
             var allAssemblies = assemblyInfoProvider.GetAssemblies();
-            var modified = GetNotSignedAssemblies( allAssemblies );
+            var notSignedAssemblies = GetNotSignedAssemblies( allAssemblies );
 
             foreach( var updater in this.updaters )
             {
-                updater.Update( snk, modified, allAssemblies );
+                updater.Update( snk, notSignedAssemblies, allAssemblies );
             }
 
-            WriteModifiedAssemblies( snk, modified );
+            WriteModifiedAssemblies( snk, notSignedAssemblies );
         }
 
-        private static void WriteModifiedAssemblies( StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified )
+        private static void WriteModifiedAssemblies( StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned )
         {
-            foreach( var assemblyInfo in modified )
+            foreach( var assemblyInfo in notSigned )
             {
                 assemblyInfo.Assembly.Write( assemblyInfo.FullPath, new WriterParameters { StrongNameKeyPair = snk } );
             }

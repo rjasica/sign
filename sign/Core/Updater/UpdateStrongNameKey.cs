@@ -8,9 +8,9 @@ namespace Sign.Core.Updater
 {
     public class UpdateStrongNameKey : IUpdater
     {
-        public void Update(System.Reflection.StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified, IEnumerable<IAssemblyInfo> allAssemblies)
+        public void Update(System.Reflection.StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies)
         {
-            foreach (var assemblyInfo in modified)
+            foreach (var assemblyInfo in notSigned)
             {
                 var name = assemblyInfo.Assembly.Name;
                 name.HashAlgorithm = AssemblyHashAlgorithm.SHA1;

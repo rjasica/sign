@@ -9,13 +9,13 @@ namespace Sign.Core.Updater
 {
     public class UpdateReference : IUpdater
     {
-        public void Update(StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified, IEnumerable<IAssemblyInfo> allAssemblies)
+        public void Update(StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies)
         {
             int startState = 0;
-            while (startState != modified.Count)
+            while (startState != notSigned.Count)
             {
-                startState = modified.Count;
-                var set = new HashSet<string>(modified.Select(x => x.Assembly.Name.Name));
+                startState = notSigned.Count;
+                var set = new HashSet<string>(notSigned.Select(x => x.Assembly.Name.Name));
 
                 foreach (var assembly in allAssemblies)
                 {
@@ -24,7 +24,7 @@ namespace Sign.Core.Updater
                         if (set.Contains(reference.Name))
                         {
                             reference.PublicKey = snk.PublicKey;
-                            modified.Add(assembly);
+                            notSigned.Add(assembly);
                         }
                     }
                 }

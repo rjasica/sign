@@ -26,15 +26,15 @@ namespace Sign.Core.Updater
                     RegexOptions.CultureInvariant | RegexOptions.Singleline);
         }
 
-        public void Update(System.Reflection.StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified, IEnumerable<IAssemblyInfo> allAssemblies)
+        public void Update(StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies)
         {
             var token = GetKeyTokenFromFullKey(snk);
 
-            foreach (var assemblyInfo in modified.ToArray())
+            foreach (var assemblyInfo in notSigned.ToArray())
             {
                 foreach (var module in assemblyInfo.Assembly.Modules)
                 {
-                    UpdareResource(modified, token, assemblyInfo, module);
+                    UpdareResource(notSigned, token, assemblyInfo, module);
                 }
             }
         }

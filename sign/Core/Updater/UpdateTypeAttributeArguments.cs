@@ -10,9 +10,9 @@ namespace Sign.Core.Updater
     {
         private static readonly string TypeFullName = typeof( Type ).FullName;
 
-        public void Update( StrongNameKeyPair snk, HashSet<IAssemblyInfo> modified, IEnumerable<IAssemblyInfo> allAssemblies )
+        public void Update( StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies )
         {
-            foreach( var assemblyInfo in modified )
+            foreach( var assemblyInfo in notSigned )
             {
                 UpdateAttributesInAssembly( snk, assemblyInfo.Assembly );
             }
