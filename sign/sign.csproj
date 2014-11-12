@@ -81,8 +81,9 @@
     <Compile Include="Core\Updater\IUpdater.cs" />
     <Compile Include="Core\ISigner.cs" />
     <Compile Include="Core\Signer.cs" />
+    <Compile Include="Core\Updater\UpdateInternalVisibleToAttribute.cs" />
     <Compile Include="Core\Updater\UpdateBaml.cs" />
-    <Compile Include="Core\Updater\UpdateKnowTypeAttribute.cs" />
+    <Compile Include="Core\Updater\UpdateTypeAttributeArguments.cs" />
     <Compile Include="Core\Updater\UpdateReference.cs" />
     <Compile Include="Core\Updater\UpdateStrongNameKey.cs" />
     <Compile Include="ErrorCodes.cs" />

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sign", "sign\sign.csproj", "{2F18ABD7-EE69-4142-AEF7-3BE3F8F565FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E588A42F-F239-41C5-843D-1511AF045F03}"
@@ -10,6 +12,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E588A4
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E63F5255-3939-4661-9E6D-F49B6BD4F30F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{596DD71B-EE91-44C0-9162-44486801B84C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NestedClasses", "NestedClasses", "{882DB1B0-ED95-40D9-A076-E88FBF59C9DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "tests\resources\NestedClasses\MainProgram\MainProgram.csproj", "{204C0D1B-627E-42DE-B22B-B09C455DD9AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependLibrary", "tests\resources\NestedClasses\DependLibrary\DependLibrary.csproj", "{4D02154D-6432-49E3-8D6B-85E11076D8BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InternalVisibleTo", "InternalVisibleTo", "{C0DE577B-CDD0-413B-BB69-B050EB9FFF74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "tests\resources\InternalVisibleTo\MainProgram\MainProgram.csproj", "{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalLibrary", "tests\resources\InternalVisibleTo\Library\InternalLibrary\InternalLibrary.csproj", "{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +39,33 @@ Global
 		{2F18ABD7-EE69-4142-AEF7-3BE3F8F565FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F18ABD7-EE69-4142-AEF7-3BE3F8F565FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F18ABD7-EE69-4142-AEF7-3BE3F8F565FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{204C0D1B-627E-42DE-B22B-B09C455DD9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{204C0D1B-627E-42DE-B22B-B09C455DD9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{204C0D1B-627E-42DE-B22B-B09C455DD9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{204C0D1B-627E-42DE-B22B-B09C455DD9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D02154D-6432-49E3-8D6B-85E11076D8BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D02154D-6432-49E3-8D6B-85E11076D8BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D02154D-6432-49E3-8D6B-85E11076D8BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D02154D-6432-49E3-8D6B-85E11076D8BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{596DD71B-EE91-44C0-9162-44486801B84C} = {E63F5255-3939-4661-9E6D-F49B6BD4F30F}
+		{882DB1B0-ED95-40D9-A076-E88FBF59C9DD} = {596DD71B-EE91-44C0-9162-44486801B84C}
+		{204C0D1B-627E-42DE-B22B-B09C455DD9AC} = {882DB1B0-ED95-40D9-A076-E88FBF59C9DD}
+		{4D02154D-6432-49E3-8D6B-85E11076D8BC} = {882DB1B0-ED95-40D9-A076-E88FBF59C9DD}
+		{C0DE577B-CDD0-413B-BB69-B050EB9FFF74} = {596DD71B-EE91-44C0-9162-44486801B84C}
+		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E} = {C0DE577B-CDD0-413B-BB69-B050EB9FFF74}
+		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4} = {C0DE577B-CDD0-413B-BB69-B050EB9FFF74}
 	EndGlobalSection
 EndGlobal
