@@ -16,8 +16,8 @@ namespace Sign.Core
             {
                 new UpdateReference(),
                 new UpdateStrongNameKey(),
-                new UpdateTypeAttributeArguments(),
                 new UpdateInternalVisibleToAttribute(),
+                new UpdateTypeAttributeArguments(),
                 new UpdateBaml()
             };
         }

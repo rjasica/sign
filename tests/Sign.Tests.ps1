@@ -50,6 +50,16 @@ Describe "Attributes with type as contructor argument" {
     
         RunAndVerify .\tests\environment\MainProgram.exe
   }
+
+    Context "Attribute with type that is already signed" {
+        CleanEnvironmnet
+        Copy-Item .\tests\resources\TypeFromSignAssembly\MainProgram\bin\Release\* .\tests\environment\
+        Copy-Item .\tests\resources\key.snk .\tests\environment\
+
+        SignAndVerify -folderName .\tests\environment\
+    
+        RunAndVerify .\tests\environment\MainProgram.exe
+  }
 }
 
 Describe "InternalsVisibleTo" {

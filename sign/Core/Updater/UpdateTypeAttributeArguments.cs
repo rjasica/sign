@@ -37,7 +37,8 @@ namespace Sign.Core.Updater
                     .Where( s => s != null )
                     .Select( s => s.Scope as AssemblyNameReference )
                     .Where( a => a != null )
-                    .Where( a => !a.HasPublicKey ) )
+                    .Where( a => !a.HasPublicKey )
+                    .Where( a => a.PublicKeyToken == null || a.PublicKeyToken.Length == 0 ) )
                 {
                     argument.PublicKey = snk.PublicKey;
                 }
