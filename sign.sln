@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "tests\resour
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalLibrary", "tests\resources\InternalVisibleTo\Library\InternalLibrary\InternalLibrary.csproj", "{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TypeFromSignAssembly", "TypeFromSignAssembly", "{EDC62315-C3D5-446C-B0B8-5D1CD27862CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignAssembly", "tests\resources\TypeFromSignAssembly\SignAssembly\SignAssembly.csproj", "{D399E75E-BC95-45FD-A175-43D229152A5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "tests\resources\TypeFromSignAssembly\MainProgram\MainProgram.csproj", "{09A07229-4A06-46F2-98DE-59C5AB8818C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +61,14 @@ Global
 		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D399E75E-BC95-45FD-A175-43D229152A5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D399E75E-BC95-45FD-A175-43D229152A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D399E75E-BC95-45FD-A175-43D229152A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D399E75E-BC95-45FD-A175-43D229152A5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +81,8 @@ Global
 		{C0DE577B-CDD0-413B-BB69-B050EB9FFF74} = {596DD71B-EE91-44C0-9162-44486801B84C}
 		{B8BC83E6-ADF5-4ACC-A367-2713C1B31C0E} = {C0DE577B-CDD0-413B-BB69-B050EB9FFF74}
 		{29F4BC2B-BF7C-433C-9F9D-B367B516D4C4} = {C0DE577B-CDD0-413B-BB69-B050EB9FFF74}
+		{EDC62315-C3D5-446C-B0B8-5D1CD27862CD} = {596DD71B-EE91-44C0-9162-44486801B84C}
+		{D399E75E-BC95-45FD-A175-43D229152A5F} = {EDC62315-C3D5-446C-B0B8-5D1CD27862CD}
+		{09A07229-4A06-46F2-98DE-59C5AB8818C4} = {EDC62315-C3D5-446C-B0B8-5D1CD27862CD}
 	EndGlobalSection
 EndGlobal
