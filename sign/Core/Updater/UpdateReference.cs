@@ -1,9 +1,6 @@
-﻿using Mono.Cecil;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Sign.Core.Updater
 {
@@ -11,21 +8,16 @@ namespace Sign.Core.Updater
     {
         public void Update(StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned, IEnumerable<IAssemblyInfo> allAssemblies)
         {
-            int startState = 0;
-            while (startState != notSigned.Count)
-            {
-                startState = notSigned.Count;
-                var set = new HashSet<string>(notSigned.Select(x => x.Assembly.Name.Name));
+            var set = new HashSet<string>(notSigned.Select(x => x.Assembly.Name.Name));
 
-                foreach (var assembly in allAssemblies)
+            foreach (var assembly in allAssemblies)
+            {
+                foreach (var reference in assembly.Assembly.MainModule.AssemblyReferences)
                 {
-                    foreach (AssemblyNameReference reference in assembly.Assembly.MainModule.AssemblyReferences)
+                    if (set.Contains(reference.Name))
                     {
-                        if (set.Contains(reference.Name))
-                        {
-                            reference.PublicKey = snk.PublicKey;
-                            notSigned.Add(assembly);
-                        }
+                        reference.PublicKey = snk.PublicKey;
+                        notSigned.Add(assembly);
                     }
                 }
             }

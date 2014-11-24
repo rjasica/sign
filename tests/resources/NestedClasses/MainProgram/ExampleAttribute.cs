@@ -11,6 +11,5 @@ namespace MainProgram
         }
 
         public Type Property { get; private set; }
-
     }
 }

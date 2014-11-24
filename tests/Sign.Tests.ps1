@@ -28,7 +28,7 @@ function RunAndVerify( [string] $path ) {
 
 
 Describe "Sign" {
-  Context "When sign files" {
+  Context "Asynchronous methods" {
 
     CleanEnvironmnet
     Copy-Item .\tests\resources\Async\* .\tests\environment\

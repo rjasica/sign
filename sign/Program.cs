@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+
 using CommandLine;
 using Common.Logging;
 using Sign.Core;
@@ -24,7 +24,7 @@ namespace Sign
 
                 try
                 {
-                    StrongNameKeyPair snk = KeyUtil.ReadKey(options.Key);
+                    var snk = KeyUtil.ReadKey(options.Key);
 
                     IAssemblyInfoProvider assemblyInfoProvider = new DefaultAssemblyInfoProvider(
                         options.Files,
@@ -49,6 +49,7 @@ namespace Sign
 
                 return ErrorCodes.Ok;
             }
+
             return ErrorCodes.ParserError;
         }
     }

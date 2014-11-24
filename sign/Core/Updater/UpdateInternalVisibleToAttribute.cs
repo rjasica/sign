@@ -20,7 +20,6 @@ namespace Sign.Core.Updater
             get { return log ?? ( log = LogManager.GetCurrentClassLogger() ); }
         }
 
-
         public void Update(
             StrongNameKeyPair snk,
             HashSet<IAssemblyInfo> notSigned,
@@ -112,6 +111,7 @@ namespace Sign.Core.Updater
 
                 return null;
             }
+
             return argumnet;
         }
 

@@ -8,7 +8,7 @@ namespace Sign.Core
 {
     public class Signer : ISigner
     {
-        private IUpdater[] updaters;
+        private readonly IUpdater[] updaters;
 
         public Signer()
         {
@@ -20,13 +20,6 @@ namespace Sign.Core
                 new UpdateTypeAttributeArguments(),
                 new UpdateBaml()
             };
-        }
-
-        private static bool IsSigned( AssemblyDefinition assemblyDefinition )
-        {
-            var name = assemblyDefinition.Name;
-            return ( name.PublicKey != null && name.PublicKey.Length != 0 )
-                   || ( name.PublicKeyToken != null && name.PublicKeyToken.Length != 0 );
         }
 
         public void Sign( StrongNameKeyPair snk, IAssemblyInfoProvider assemblyInfoProvider )
@@ -42,7 +35,14 @@ namespace Sign.Core
             WriteModifiedAssemblies( snk, notSignedAssemblies );
         }
 
-        private static void WriteModifiedAssemblies( StrongNameKeyPair snk, HashSet<IAssemblyInfo> notSigned )
+        private static bool IsSigned( AssemblyDefinition assemblyDefinition )
+        {
+            var name = assemblyDefinition.Name;
+            return ( name.PublicKey != null && name.PublicKey.Length != 0 )
+                   || ( name.PublicKeyToken != null && name.PublicKeyToken.Length != 0 );
+        }
+
+        private static void WriteModifiedAssemblies( StrongNameKeyPair snk, IEnumerable<IAssemblyInfo> notSigned )
         {
             foreach( var assemblyInfo in notSigned )
             {
@@ -58,6 +58,7 @@ namespace Sign.Core
             {
                 modified.Add( assemblyInfo );
             }
+
             return modified;
         }
     }

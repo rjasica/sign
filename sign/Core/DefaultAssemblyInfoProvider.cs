@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Common.Logging;
 using Mono.Cecil;
@@ -12,7 +11,7 @@ namespace Sign.Core
 {
     public class DefaultAssemblyInfoProvider : IAssemblyInfoProvider
     {
-        private readonly static ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly string[] files;
         private readonly string[] dirs;
         private readonly string pattern;
@@ -34,14 +33,14 @@ namespace Sign.Core
 
         public IEnumerable<IAssemblyInfo> GetAssemblies()
         {
-            var regex = new Regex( pattern );
+            var regex = new Regex( this.pattern );
 
-            var paths = new List<string>( files );
+            var paths = new List<string>( this.files );
 
-            paths.AddRange( dirs.SelectMany( Directory.EnumerateFiles ).Where( x => regex.IsMatch( x ) ) );
+            paths.AddRange( this.dirs.SelectMany( Directory.EnumerateFiles ).Where( x => regex.IsMatch( x ) ) );
 
             Log.Info( "Assembly to analyze:" );
-            foreach( string path in paths )
+            foreach( var path in paths )
             {
                 Log.Info( path );
             }
