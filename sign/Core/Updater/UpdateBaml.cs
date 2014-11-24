@@ -1,5 +1,4 @@
-﻿using Mono.Cecil;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,21 +6,23 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
+
+using Mono.Cecil;
 
 namespace Sign.Core.Updater
 {
     public class UpdateBaml : IUpdater
     {
-        private Regex regex;
+        private readonly Regex regex;
+
         public UpdateBaml()
         {
-            var size = @"[\u0080-\u00FF]{0,4}[\u0000-\u0079]";
+            const string Size = @"[\u0080-\u00FF]{0,4}[\u0000-\u0079]";
             this.regex =
                 new Regex(
-                    @"(?<marker>\u001C)(?<totalsize>" + size + 
-                    @")(?<id>..)(?<size>" + size +
+                    @"(?<marker>\u001C)(?<totalsize>" + Size + 
+                    @")(?<id>..)(?<size>" + Size +
                     @")(?<name>(?:\w+\.)*\w+), Version=(?<version>(?:\d+\.){3}\d+), Culture=(?<culture>(?:\w|\-)+), PublicKeyToken=(?<token>null|(?:\d|[abcdef]){16})",
                     RegexOptions.CultureInvariant | RegexOptions.Singleline);
         }
@@ -34,92 +35,17 @@ namespace Sign.Core.Updater
             {
                 foreach (var module in assemblyInfo.Assembly.Modules)
                 {
-                    UpdareResource(notSigned, token, assemblyInfo, module);
+                    this.UpdareResource(notSigned, token, assemblyInfo, module);
                 }
             }
         }
 
-        private void UpdareResource(HashSet<IAssemblyInfo> modified, string token, IAssemblyInfo assemblyInfo, ModuleDefinition module)
-        {
-            var resArray = module.Resources.ToArray();
-            for (var resIndex = 0; resIndex < resArray.Length; resIndex++)
-            {
-                var resource = resArray[resIndex];
-                if (resource.ResourceType == ResourceType.Embedded)
-                {
-                    if(!resource.Name.EndsWith(".g.resources"))
-                    {
-                        continue;
-                    }
-
-                    EmbeddedResource embededResource = (EmbeddedResource)resource;
-                    bool modResource = false;
-
-                    MemoryStream memoryStream = new MemoryStream();
-                    ResourceWriter rw = new ResourceWriter(memoryStream);
-
-                    Stream stream = embededResource.GetResourceStream();
-                    ResourceReader reader = new ResourceReader(stream);
-                    foreach (DictionaryEntry entry in reader.OfType<DictionaryEntry>().ToArray())
-                    {
-                        string resourceName = entry.Key.ToString();
-                        Stream resourceStream = entry.Value as Stream;
-
-                        if (resourceStream != null && resourceName.EndsWith(".baml", StringComparison.InvariantCulture))
-                        {
-                            modResource = CheckBaml(modified, token, assemblyInfo, modResource, rw, resourceName, resourceStream);
-                        }
-                        else
-                        {
-                            rw.AddResource(resourceName, entry.Value);
-                        }
-                    }
-
-                    if (modResource)
-                    {
-                        ReplaceResource(module, resIndex, resource, memoryStream, rw);
-                    }
-                }
-            }
-        }
-
-        private bool CheckBaml(HashSet<IAssemblyInfo> modified, string token, IAssemblyInfo assemblyInfo, bool modResource, ResourceWriter rw, string resourceName, Stream resourceStream)
-        {
-            BinaryReader br = new BinaryReader(resourceStream);
-            byte[] datab = br.ReadBytes((int)br.BaseStream.Length);
-
-            List<char> cList = new List<char>();
-            foreach (byte b in datab) cList.Add((char)b);
-            string data = new string(cList.ToArray());
-
-            List<Match> toReplace = new List<Match>();
-
-            var matches = regex.Matches(data);
-            foreach (Match match in matches)
-            {
-                string name = match.Groups["name"].Value;
-                if (modified.Any(x => x.Assembly.Name.Name == name))
-                {
-                    toReplace.Add(match);
-                }
-            }
-
-            if (toReplace.Count != 0)
-            {
-                modified.Add(assemblyInfo);
-                modResource = true;
-
-                UptadateBinaryBaml(modified, token, ref modResource, rw, resourceName, cList, toReplace);
-            }
-            else
-            {
-                resourceStream.Position = 0;
-                rw.AddResource(resourceName, resourceStream);
-            }
-            return modResource;
-        }
-
-        private static void ReplaceResource(ModuleDefinition module, int resIndex, Resource resource, MemoryStream memoryStream, ResourceWriter rw)
+        private static void ReplaceResource(
+            ModuleDefinition module,
+            int resIndex,
+            Resource resource,
+            MemoryStream memoryStream,
+            ResourceWriter rw )
         {
             module.Resources.RemoveAt(resIndex);
             rw.Generate();
@@ -130,22 +56,27 @@ namespace Sign.Core.Updater
             module.Resources.Insert(resIndex, newEmbeded);
         }
 
-        private static void UptadateBinaryBaml(HashSet<IAssemblyInfo> modified, string token, ref bool modResource, ResourceWriter rw, string resourceName, List<char> cList,  List<Match> toReplace)
+        private static void UptadateBinaryBaml(
+            string token,
+            ResourceWriter rw,
+            string resourceName,
+            List<char> charList,
+            List<Match> elementsToReplace )
         {
-            toReplace = toReplace.OrderBy(x => x.Index).ToList();
+            elementsToReplace = elementsToReplace.OrderBy(x => x.Index).ToList();
 
-            MemoryStream buffer = new MemoryStream();
+            var buffer = new MemoryStream();
 
-            using (BinaryWriter bufferWriter = new BinaryWriter(buffer))
+            using (var bufferWriter = new BinaryWriter(buffer))
             {
-                for (var i = 0; i < cList.Count; i++)
+                for (var i = 0; i < charList.Count; i++)
                 {
-                    if (toReplace.Count > 0 && toReplace[0].Index == i)
+                    if (elementsToReplace.Count > 0 && elementsToReplace[0].Index == i)
                     {
-                        Match match = toReplace[0];
+                        var match = elementsToReplace[0];
                         bufferWriter.Write((byte)0x1C);
 
-                        string newAssembly =
+                        var newAssembly =
                             string.Format(
                                 "{0}, Version={1}, Culture={2}, PublicKeyToken={3}",
                                 match.Groups["name"].Value,
@@ -165,49 +96,136 @@ namespace Sign.Core.Updater
 
                         i += match.Length - 1;
 
-                        toReplace.RemoveAt(0);
+                        elementsToReplace.RemoveAt(0);
                     }
                     else
                     {
-                        byte b = (byte)cList[i];
+                        var b = (byte)charList[i];
                         bufferWriter.Write(b);
                     }
                 }
 
                 bufferWriter.Flush();
 
-                var array = buffer.ToArray();
-                var newData = new string(array.Select(x => (char)x).ToArray());
-
-                MemoryStream mst = new MemoryStream(buffer.ToArray());
+                var mst = new MemoryStream(buffer.ToArray());
                 rw.AddResource(resourceName, mst);
             }
         }
 
         private static string GetKeyTokenFromFullKey(StrongNameKeyPair snk)
         {
-            SHA1CryptoServiceProvider csp = new SHA1CryptoServiceProvider();
-            byte[] hash = csp.ComputeHash(snk.PublicKey);
-            byte[] token = new byte[8];
-            for (int i = 0; i < 8; i++)
+            var csp = new SHA1CryptoServiceProvider();
+            var hash = csp.ComputeHash(snk.PublicKey);
+            var token = new byte[8];
+            for (var i = 0; i < 8; i++)
             {
                 token[i] = hash[hash.Length - (i + 1)];
             }
 
-            return string.Join("", token.Select(x => x.ToString("x2")));
+            return string.Join( string.Empty, token.Select(x => x.ToString("x2")));
         }
 
         private static byte[] Get7BitEncoded(int value)
         {
-            List<byte> list = new List<byte>();
-            uint num = (uint)value;
+            var list = new List<byte>();
+            var num = (uint)value;
+
             while (num >= 128U)
             {
                 list.Add((byte)(num | 128U));
                 num >>= 7;
             }
+
             list.Add((byte)num);
             return list.ToArray();
+        }
+
+        private void UpdareResource(HashSet<IAssemblyInfo> modified, string token, IAssemblyInfo assemblyInfo, ModuleDefinition module)
+        {
+            var resArray = module.Resources.ToArray();
+            for (var resIndex = 0; resIndex < resArray.Length; resIndex++)
+            {
+                var resource = resArray[resIndex];
+                if (resource.ResourceType == ResourceType.Embedded)
+                {
+                    if(!resource.Name.EndsWith(".g.resources"))
+                    {
+                        continue;
+                    }
+
+                    var embededResource = (EmbeddedResource)resource;
+                    var modResource = false;
+
+                    var memoryStream = new MemoryStream();
+                    var rw = new ResourceWriter(memoryStream);
+
+                    var stream = embededResource.GetResourceStream();
+                    var reader = new ResourceReader(stream);
+                    foreach (var entry in reader.OfType<DictionaryEntry>().ToArray())
+                    {
+                        var resourceName = entry.Key.ToString();
+                        var resourceStream = entry.Value as Stream;
+
+                        if (resourceStream != null && resourceName.EndsWith(".baml", StringComparison.InvariantCulture))
+                        {
+                            modResource = this.CheckBaml(modified, token, assemblyInfo, modResource, rw, resourceName, resourceStream);
+                        }
+                        else
+                        {
+                            rw.AddResource(resourceName, entry.Value);
+                        }
+                    }
+
+                    if (modResource)
+                    {
+                        ReplaceResource(module, resIndex, resource, memoryStream, rw);
+                    }
+                }
+            }
+        }
+
+        private bool CheckBaml(
+            HashSet<IAssemblyInfo> modified,
+            string token,
+            IAssemblyInfo assemblyInfo,
+            bool modResource,
+            ResourceWriter rw,
+            string resourceName,
+            Stream resourceStream )
+        {
+            var br = new BinaryReader(resourceStream);
+            var datab = br.ReadBytes((int)br.BaseStream.Length);
+
+            var charList = datab.Select( b => (char)b ).ToList();
+
+            var data = new string( charList.ToArray() );
+
+            var elementsToReplace = new List<Match>();
+
+            var matches = this.regex.Matches(data);
+            foreach (Match match in matches)
+            {
+                var name = match.Groups["name"].Value;
+                if (modified.Any(x => x.Assembly.Name.Name == name))
+                {
+                    elementsToReplace.Add(match);
+                }
+            }
+
+            if (elementsToReplace.Count != 0)
+            {
+                modified.Add(assemblyInfo);
+                modResource = true;
+
+                UptadateBinaryBaml( token, rw, resourceName, charList, elementsToReplace);
+            }
+            else
+            {
+                resourceStream.Position = 0;
+                rw.AddResource(resourceName, resourceStream);
+            }
+
+            return modResource;
         }
     }
 }

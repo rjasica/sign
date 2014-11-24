@@ -19,7 +19,6 @@ using CommandLine;
 [assembly: AssemblyVersion("1.1.4.0")]
 [assembly: AssemblyFileVersion("1.1.4.0")]
 
-
 [assembly: AssemblyInformationalVersionAttribute("1.1.4")]
 
 [assembly: AssemblyLicense(

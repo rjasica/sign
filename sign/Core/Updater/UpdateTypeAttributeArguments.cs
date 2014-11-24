@@ -19,15 +19,7 @@ namespace Sign.Core.Updater
             }
         }
 
-        private void UpdateAttributesInAssembly( StrongNameKeyPair snk, AssemblyDefinition assemby )
-        {
-            foreach( var type in assemby.MainModule.GetTypes().Where( t => t.HasCustomAttributes ) )
-            {
-                this.UpdateAttributesOnType( type, snk );
-            }
-        }
-
-        private void UpdateAttributesOnType( TypeDefinition type, StrongNameKeyPair snk )
+        private static void UpdateAttributesOnType( TypeDefinition type, StrongNameKeyPair snk )
         {
             foreach( var attribute in type.CustomAttributes )
             {
@@ -43,6 +35,14 @@ namespace Sign.Core.Updater
                 {
                     argument.PublicKey = snk.PublicKey;
                 }
+            }
+        }
+
+        private static void UpdateAttributesInAssembly( StrongNameKeyPair snk, AssemblyDefinition assemby )
+        {
+            foreach( var type in assemby.MainModule.GetTypes().Where( t => t.HasCustomAttributes ) )
+            {
+                UpdateAttributesOnType( type, snk );
             }
         }
     }

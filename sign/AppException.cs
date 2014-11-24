@@ -1,46 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Sign
 {
     [Serializable]
     public class AppException : Exception
     {
-        public int ErrorCode { get; private set; }
-
         public AppException()
         {
-            ErrorCode = ErrorCodes.DefaultErrorCode;
+            this.ErrorCode = ErrorCodes.DefaultErrorCode;
         }
 
         public AppException(string message) : base(message)
         {
-            ErrorCode = ErrorCodes.DefaultErrorCode;
+            this.ErrorCode = ErrorCodes.DefaultErrorCode;
         }
 
         public AppException(string message, Exception inner) : base(message, inner)
         {
-            ErrorCode = ErrorCodes.DefaultErrorCode;
+            this.ErrorCode = ErrorCodes.DefaultErrorCode;
         }
 
         public AppException(int errorCode)
         {
-            ErrorCode = errorCode;
+            this.ErrorCode = errorCode;
         }
 
         public AppException(string message, int errorCode)
             : base(message)
         {
-            ErrorCode = errorCode;
+            this.ErrorCode = errorCode;
         }
 
         public AppException(string message, Exception inner, int errorCode)
             : base(message, inner)
         {
-            ErrorCode = errorCode;
+            this.ErrorCode = errorCode;
         }
 
         protected AppException(
@@ -49,5 +44,7 @@ namespace Sign
         {
             this.ErrorCode = info.GetInt32("ErrorCode");
         }
+
+        public int ErrorCode { get; private set; }
     }
 }
