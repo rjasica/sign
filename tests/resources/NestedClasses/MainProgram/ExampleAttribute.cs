@@ -2,7 +2,7 @@
 
 namespace MainProgram
 {
-    [AttributeUsage( AttributeTargets.Class )]
+    [AttributeUsage( AttributeTargets.All )]
     public class ExampleAttribute : Attribute
     {
         public ExampleAttribute( Type property )
