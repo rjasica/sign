@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace MainProgram
@@ -14,16 +15,33 @@ namespace MainProgram
         {
             try
             {
-                var attribute = typeof( TestClass ).GetCustomAttribute<ExampleAttribute>();
+                var embededClassType = typeof( TestClass );
+                var classAttributes = embededClassType.GetCustomAttributes<ExampleAttribute>();
 
-                var instance = Activator.CreateInstance( attribute.Type );
+                var fieldsAttributes = embededClassType.GetFields( 
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
+                    .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
+                    .Where( a => a != null );
 
-                attribute.Type.GetMethod( "Write" ).Invoke( instance, null );
+                var memberAttributes = embededClassType.GetMembers()
+                    .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
+                    .Where( a => a != null );
+
+                foreach( var attr in classAttributes.Concat( fieldsAttributes ).Concat( memberAttributes ) )
+                {
+                    TestAttribute( attr );
+                }
             }
             catch( Exception er )
             {
                 Console.WriteLine( "Error {0}", er );
             }
+        }
+
+        private static void TestAttribute( ExampleAttribute attribute )
+        {
+            var instance = (SignAssembly.Writer)Activator.CreateInstance( attribute.Type );
+            instance.Write();
         }
     }
 }
