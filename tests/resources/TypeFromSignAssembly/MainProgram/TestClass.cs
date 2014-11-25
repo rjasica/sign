@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Threading;
 
+using Tests.Common;
+
 namespace MainProgram
 {
-    [Example( typeof( SignAssembly.Writer ) )]
+    [TypeParameter( typeof( SignAssembly.Writer ) )]
     public class TestClass
     {
-        [Example( typeof( SignAssembly.Writer ) )]
+        [TypeParameter( typeof( SignAssembly.Writer ) )]
         private int field;
 
-        [Example( typeof( SignAssembly.Writer ) )]
+        [TypeParameter( typeof( SignAssembly.Writer ) )]
         public event EventHandler Event;
 
-        [Example( typeof( SignAssembly.Writer ) )]
+        [TypeParameter( typeof( SignAssembly.Writer ) )]
         public int Property { get; set; }
 
-        [Example( typeof( SignAssembly.Writer ) )]
+        [TypeParameter( typeof( SignAssembly.Writer ) )]
         public void Method()
         {
             this.field++;

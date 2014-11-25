@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
+
 using DependLibrary;
+
+using Tests.Common;
 
 namespace MainProgram
 {
@@ -9,25 +10,15 @@ namespace MainProgram
     {
         public static void Main( string[] args )
         {
-            var embededClassType = typeof( ExampleClass.EmbededClass );
-            var classAttributes = embededClassType.GetCustomAttributes<ExampleAttribute>();
+            var classAttributes = typeof( ExampleClass.EmbededClass ).GetAllAttributes<TypeParameterAttribute>();
 
-            var fieldsAttributes = embededClassType.GetFields( 
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
-                .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
-                .Where( a => a != null );
-
-            var memberAttributes = embededClassType.GetMembers()
-                .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
-                .Where( a => a != null );
-
-            foreach( var attr in classAttributes.Concat( fieldsAttributes ).Concat( memberAttributes ) )
+            foreach( var attr in classAttributes )
             {
                 TestAttribute( attr );
             }
         }
 
-        private static void TestAttribute( ExampleAttribute attribute )
+        private static void TestAttribute( TypeParameterAttribute attribute )
         {
             var instance = (ExternalClass)Activator.CreateInstance( attribute.Property );
             instance.WriteStatus();

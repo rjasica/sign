@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace MainProgram
+namespace Tests.Common
 {
     [AttributeUsage( AttributeTargets.All )]
-    public class ExampleAttribute : Attribute
+    public class TypeParameterAttribute : Attribute
     {
-        public ExampleAttribute( Type property )
+        public TypeParameterAttribute( Type property )
         {
             this.Property = property;
         }

@@ -3,23 +3,25 @@ using System.Threading;
 
 using DependLibrary;
 
+using Tests.Common;
+
 namespace MainProgram
 {
     public class ExampleClass
     {
-        [Example( typeof( ExternalClass ) )]
+        [TypeParameter( typeof( ExternalClass ) )]
         public class EmbededClass
         {
-            [Example( typeof( ExternalClass ) )]
+            [TypeParameter( typeof( ExternalClass ) )]
             private int field;
 
-            [Example( typeof( ExternalClass ) )]
+            [TypeParameter( typeof( ExternalClass ) )]
             public event EventHandler Event;
 
-            [Example( typeof( ExternalClass ) )]
+            [TypeParameter( typeof( ExternalClass ) )]
             public int Property { get; set; }
 
-            [Example( typeof( ExternalClass ) )]
+            [TypeParameter( typeof( ExternalClass ) )]
             public void Method()
             {
                 this.field++;

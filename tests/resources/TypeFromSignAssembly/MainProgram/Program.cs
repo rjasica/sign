@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
+
+using Tests.Common;
 
 namespace MainProgram
 {
@@ -8,26 +9,11 @@ namespace MainProgram
     {
         public static void Main( string[] args )
         {
-            Test();
-        }
-
-        private static void Test()
-        {
             try
             {
-                var embededClassType = typeof( TestClass );
-                var classAttributes = embededClassType.GetCustomAttributes<ExampleAttribute>();
+                var classAttributes = typeof( TestClass ).GetAllAttributes<TypeParameterAttribute>();
 
-                var fieldsAttributes = embededClassType.GetFields( 
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
-                    .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
-                    .Where( a => a != null );
-
-                var memberAttributes = embededClassType.GetMembers()
-                    .SelectMany( m => m.GetCustomAttributes<ExampleAttribute>() )
-                    .Where( a => a != null );
-
-                foreach( var attr in classAttributes.Concat( fieldsAttributes ).Concat( memberAttributes ) )
+                foreach( var attr in classAttributes )
                 {
                     TestAttribute( attr );
                 }
@@ -38,9 +24,9 @@ namespace MainProgram
             }
         }
 
-        private static void TestAttribute( ExampleAttribute attribute )
+        private static void TestAttribute( TypeParameterAttribute attribute )
         {
-            var instance = (SignAssembly.Writer)Activator.CreateInstance( attribute.Type );
+            var instance = (SignAssembly.Writer)Activator.CreateInstance( attribute.Property );
             instance.Write();
         }
     }
