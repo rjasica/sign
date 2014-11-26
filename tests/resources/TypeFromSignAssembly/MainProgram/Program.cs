@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Reflection;
 
+using Tests.Common;
+
 namespace MainProgram
 {
     public class Program
     {
-        static void Main( string[] args )
-        {
-            Test();
-        }
-
-        private static void Test()
+        public static void Main( string[] args )
         {
             try
             {
-                var attribute = typeof( TestClass ).GetCustomAttribute<ExampleAttribute>();
+                var classAttributes = typeof( TestClass ).GetAllAttributes<TypeParameterAttribute>();
 
-                var instance = Activator.CreateInstance( attribute.Type );
-
-                attribute.Type.GetMethod( "Write" ).Invoke( instance, null );
+                foreach( var attr in classAttributes )
+                {
+                    TestAttribute( attr );
+                }
             }
             catch( Exception er )
             {
                 Console.WriteLine( "Error {0}", er );
             }
+        }
+
+        private static void TestAttribute( TypeParameterAttribute attribute )
+        {
+            var instance = (SignAssembly.Writer)Activator.CreateInstance( attribute.Property );
+            instance.Write();
         }
     }
 }

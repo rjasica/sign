@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Reflection;
+
 using DependLibrary;
+
+using Tests.Common;
 
 namespace MainProgram
 {
@@ -8,11 +10,17 @@ namespace MainProgram
     {
         public static void Main( string[] args )
         {
-            var embededClassType = typeof( ExampleClass.EmbededClass );
-            var attribute = embededClassType.GetCustomAttribute<ExampleAttribute>();
+            var classAttributes = typeof( ExampleClass.EmbededClass ).GetAllAttributes<TypeParameterAttribute>();
 
-            var instance = ( ExternalClass )Activator.CreateInstance( attribute.Property );
+            foreach( var attr in classAttributes )
+            {
+                TestAttribute( attr );
+            }
+        }
 
+        private static void TestAttribute( TypeParameterAttribute attribute )
+        {
+            var instance = (ExternalClass)Activator.CreateInstance( attribute.Property );
             instance.WriteStatus();
         }
     }

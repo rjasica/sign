@@ -1,8 +1,11 @@
 ﻿using System;
-using Mono.Cecil;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
+using Mono.Cecil;
+
+using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 
 namespace Sign.Core.Updater
 {
@@ -18,15 +21,25 @@ namespace Sign.Core.Updater
             }
         }
 
-        private void UpdateAttributesInAssembly( StrongNameKeyPair snk, AssemblyDefinition assemby )
+        private static void UpdateAttributesInAssembly( StrongNameKeyPair snk, AssemblyDefinition assemby )
         {
-            foreach( var type in assemby.MainModule.GetTypes().Where( t => t.HasCustomAttributes ) )
+            foreach( var type in assemby.MainModule.GetTypes() )
             {
-                this.UpdateAttributesOnType( type, snk );
+                IEnumerable<ICustomAttributeProvider> types = new[] { type };
+                IEnumerable<ICustomAttributeProvider> fields = type.Fields;
+                IEnumerable<ICustomAttributeProvider> properties = type.Properties;
+                IEnumerable<ICustomAttributeProvider> events = type.Events;
+                IEnumerable<ICustomAttributeProvider> methods = type.Methods;
+
+                foreach( var attrProvider 
+                    in types.Concat( fields ).Concat( properties ).Concat( events ).Concat( methods ) )
+                {
+                    UpdateAttributesOnType( attrProvider, snk );
+                }
             }
         }
 
-        private void UpdateAttributesOnType( TypeDefinition type, StrongNameKeyPair snk )
+        private static void UpdateAttributesOnType( ICustomAttributeProvider type, StrongNameKeyPair snk )
         {
             foreach( var attribute in type.CustomAttributes )
             {

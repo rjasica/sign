@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sign", "sign\sign.csproj", "{2F18ABD7-EE69-4142-AEF7-3BE3F8F565FD}"
 EndProject
@@ -14,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E588A4
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E63F5255-3939-4661-9E6D-F49B6BD4F30F}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Sign.Tests.ps1 = tests\Sign.Tests.ps1
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{596DD71B-EE91-44C0-9162-44486801B84C}"
 EndProject
@@ -34,6 +37,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignAssembly", "tests\resources\TypeFromSignAssembly\SignAssembly\SignAssembly.csproj", "{D399E75E-BC95-45FD-A175-43D229152A5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "tests\resources\TypeFromSignAssembly\MainProgram\MainProgram.csproj", "{09A07229-4A06-46F2-98DE-59C5AB8818C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "tests\tests.common\Tests.Common.csproj", "{DF9B9092-0F6C-4492-A54E-9F93543EEA0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +74,10 @@ Global
 		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09A07229-4A06-46F2-98DE-59C5AB8818C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF9B9092-0F6C-4492-A54E-9F93543EEA0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF9B9092-0F6C-4492-A54E-9F93543EEA0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF9B9092-0F6C-4492-A54E-9F93543EEA0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF9B9092-0F6C-4492-A54E-9F93543EEA0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,5 +93,6 @@ Global
 		{EDC62315-C3D5-446C-B0B8-5D1CD27862CD} = {596DD71B-EE91-44C0-9162-44486801B84C}
 		{D399E75E-BC95-45FD-A175-43D229152A5F} = {EDC62315-C3D5-446C-B0B8-5D1CD27862CD}
 		{09A07229-4A06-46F2-98DE-59C5AB8818C4} = {EDC62315-C3D5-446C-B0B8-5D1CD27862CD}
+		{DF9B9092-0F6C-4492-A54E-9F93543EEA0F} = {596DD71B-EE91-44C0-9162-44486801B84C}
 	EndGlobalSection
 EndGlobal

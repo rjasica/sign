@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using CommandLine;
 
@@ -16,11 +15,10 @@ using CommandLine;
 
 [assembly: Guid("82af63f5-2fba-4c28-9997-9bb244bd7863")]
 
-[assembly: AssemblyVersion("1.1.4.0")]
-[assembly: AssemblyFileVersion("1.1.4.0")]
+[assembly: AssemblyVersion("1.1.5.0")]
+[assembly: AssemblyFileVersion("1.1.5.0")]
 
-
-[assembly: AssemblyInformationalVersionAttribute("1.1.4")]
+[assembly: AssemblyInformationalVersionAttribute("1.1.5")]
 
 [assembly: AssemblyLicense(
     "This is free software. You may redistribute copies of it under the terms of",

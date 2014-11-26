@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 
-namespace Sign
+namespace Sign.Core
 {
     public class AssemblyInfo : IAssemblyInfo
     {
         public AssemblyInfo(string fullPath, AssemblyDefinition assembly)
         {
-            FullPath = fullPath;
-            Assembly = assembly;
+            this.FullPath = fullPath;
+            this.Assembly = assembly;
         }
 
         public string FullPath { get; private set; }

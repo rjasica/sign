@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
+
 using Common.Logging;
 using Common.Logging.Factory;
 using Common.Logging.Simple;
